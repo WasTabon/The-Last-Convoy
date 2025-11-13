@@ -390,7 +390,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4498570d509bf148a646e7560f4a8b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseSensitivity: 150
+  mouseSensitivity: 200
   playerBody: {fileID: 0}
   minVerticalAngle: -90
   maxVerticalAngle: 90
@@ -523,10 +523,13 @@ MonoBehaviour:
   fireRate: 0.1
   maxBarrelRotationSpeed: 1800
   barrelTransform: {fileID: 4695263065035360}
+  minigunTransform: {fileID: 4212910486124534}
   cameraTransform: {fileID: 961739753}
-  shakeIntensity: 0.08
-  shakeFrequency: 25
-  shakeRecoverySpeed: 10
+  shakeIntensity: 0.04
+  shakeFrequency: 30
+  recoilRotationAmount: 2
+  recoilFrequency: 30
+  recoilRecoverySpeed: 8
 --- !u!1 &2102658802
 GameObject:
   m_ObjectHideFlags: 0
@@ -7139,7 +7142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7934379f1fb8d33498bbd4ed616e9ab5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 2000
+  rotationSpeed: 5000
 --- !u!33 &33389923514992914
 MeshFilter:
   m_ObjectHideFlags: 0

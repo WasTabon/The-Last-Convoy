@@ -53,6 +53,9 @@ public class MinigunController : MonoBehaviour
     
     [Header("Impact Effects")]
     [SerializeField] private BulletImpactPool impactPool;
+    
+    [Header("Crosshair")]
+    [SerializeField] private Camera targetCamera;
 
     private float currentSpinProgress = 0f;
     private bool isSpinning = false;
@@ -132,6 +135,11 @@ public class MinigunController : MonoBehaviour
         ConfigureFireAudio();
     }
 
+    public bool IsFiring()
+    {
+        return isFiring;
+    }
+    
     AudioSource CreateAudioSource(string name, Transform position)
     {
         GameObject audioObj = new GameObject($"Audio_{name}");
@@ -379,9 +387,30 @@ public class MinigunController : MonoBehaviour
             return;
         }
         
-        // Determine raycast origin
-        Vector3 origin = raycastOrigin != null ? raycastOrigin.position : transform.position;
-        Vector3 direction = raycastOrigin != null ? raycastOrigin.forward : transform.forward;
+        // Determine raycast origin and direction
+        Vector3 origin;
+        Vector3 direction;
+        
+        // Use camera center for accurate crosshair shooting
+        if (targetCamera != null)
+        {
+            // Raycast from center of screen (where crosshair is)
+            Ray ray = targetCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+            origin = ray.origin;
+            direction = ray.direction;
+        }
+        else if (raycastOrigin != null)
+        {
+            // Fallback to raycast origin
+            origin = raycastOrigin.position;
+            direction = raycastOrigin.forward;
+        }
+        else
+        {
+            // Last resort fallback
+            origin = transform.position;
+            direction = transform.forward;
+        }
         
         // Perform raycast
         RaycastHit hit;

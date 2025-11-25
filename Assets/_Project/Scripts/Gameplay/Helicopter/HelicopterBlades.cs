@@ -7,6 +7,6 @@ public class HelicopterBlades : MonoBehaviour
     void Update()
     {
         // Обертання навколо осі Z
-        transform.Rotate(0f, 0f, rotationSpeed * Time.deltaTime);
+        transform.Rotate(0f, rotationSpeed * Time.deltaTime, 0f);
     }
 }

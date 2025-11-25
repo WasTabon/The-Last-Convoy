@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class MinigunController : MonoBehaviour
 {
+    [SerializeField] private ParticleSystem _gunShots;
+    [SerializeField] private ParticleSystem _bulletShells;
+    
     [Header("Minigun Settings")]
     [SerializeField] private float spinUpTime = 1.5f;
     [SerializeField] private float fireRate = 0.1f;
@@ -119,6 +122,17 @@ public class MinigunController : MonoBehaviour
         {
             Fire();
             nextFireTime = Time.time + fireRate;
+        }
+
+        if (isFiring && !_gunShots.isPlaying)
+        {
+            _gunShots.Play();
+            _bulletShells.Play();
+        }
+        else if (!isFiring && _gunShots.isPlaying)
+        {
+            _gunShots.Stop();
+            _bulletShells.Stop();
         }
     }
 

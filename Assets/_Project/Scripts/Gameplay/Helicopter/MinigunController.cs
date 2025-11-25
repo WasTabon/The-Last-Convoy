@@ -28,6 +28,23 @@ public class MinigunController : MonoBehaviour
     [SerializeField] private float recoilFrequency = 30f;
     [SerializeField] private float recoilRecoverySpeed = 8f;
 
+    [Header("Audio - Minigun")]
+    [SerializeField] private AudioClip minigunSpinClip;
+    [SerializeField] private AudioClip minigunFireLoopClip;
+    
+    [Header("Audio Settings")]
+    [SerializeField] private float baseFireVolume = 0.8f;
+    [SerializeField] private float baseSpinVolume = 0.5f;
+    [SerializeField] private float firePitchMin = 0.95f;
+    [SerializeField] private float firePitchMax = 1.05f;
+    [SerializeField] private float spinPitchMin = 0.5f;
+    [SerializeField] private float spinPitchMax = 1.2f;
+    [SerializeField] private float maxDistance = 80f;
+    [SerializeField] private float minDistance = 3f;
+    
+    [Header("Audio Positioning")]
+    [SerializeField] private Transform muzzlePosition;
+
     private float currentSpinProgress = 0f;
     private bool isSpinning = false;
     private bool isFiring = false;
@@ -40,6 +57,17 @@ public class MinigunController : MonoBehaviour
     
     private Vector3 minigunRotationRecoil = Vector3.zero;
     private float recoilPhase = 0f;
+
+    // Audio sources
+    private AudioSource spinSource;
+    private AudioSource fireSource;
+    
+    // Audio filters
+    private AudioLowPassFilter fireLowPass;
+    private AudioHighPassFilter fireHighPass;
+    private AudioDistortionFilter fireDistortion;
+    private AudioReverbFilter fireReverb;
+    private AudioEchoFilter fireEcho;
 
     void Start()
     {
@@ -57,6 +85,8 @@ public class MinigunController : MonoBehaviour
         {
             Debug.LogWarning("Minigun Transform not assigned!");
         }
+
+        SetupAudio();
     }
 
     void Update()
@@ -68,6 +98,166 @@ public class MinigunController : MonoBehaviour
         UpdateCameraShake();
         UpdateRecoil();
         UpdateMinigunRotation();
+        UpdateAudio();
+    }
+
+    void SetupAudio()
+    {
+        // Spin sound (motor spinning up/down)
+        spinSource = CreateAudioSource("Spin", muzzlePosition);
+        spinSource.spatialBlend = 0.8f;
+        spinSource.volume = 0f;
+        spinSource.spread = 90f;
+        spinSource.minDistance = minDistance;
+        spinSource.maxDistance = maxDistance;
+        spinSource.clip = minigunSpinClip;
+        spinSource.loop = true;
+
+        // Fire loop sound
+        fireSource = CreateAudioSource("Fire", muzzlePosition);
+        ConfigureFireAudio();
+    }
+
+    AudioSource CreateAudioSource(string name, Transform position)
+    {
+        GameObject audioObj = new GameObject($"Audio_{name}");
+        
+        if (position != null)
+        {
+            audioObj.transform.SetParent(position);
+            audioObj.transform.localPosition = Vector3.zero;
+        }
+        else
+        {
+            audioObj.transform.SetParent(transform);
+            audioObj.transform.localPosition = Vector3.zero;
+        }
+        
+        AudioSource source = audioObj.AddComponent<AudioSource>();
+        source.playOnAwake = false;
+        source.loop = true;
+        source.spatialBlend = 1f;
+        source.dopplerLevel = 0.5f;
+        source.rolloffMode = AudioRolloffMode.Custom;
+        source.priority = 64;
+        
+        return source;
+    }
+
+    void ConfigureFireAudio()
+    {
+        if (fireSource == null) return;
+        
+        fireSource.clip = minigunFireLoopClip;
+        fireSource.volume = baseFireVolume;
+        fireSource.spatialBlend = 0.9f;
+        fireSource.spread = 80f;
+        fireSource.minDistance = minDistance;
+        fireSource.maxDistance = maxDistance;
+        fireSource.priority = 32;
+        
+        // Low-pass filter for distance muffling
+        fireLowPass = fireSource.gameObject.AddComponent<AudioLowPassFilter>();
+        fireLowPass.cutoffFrequency = 8000f;
+        fireLowPass.lowpassResonanceQ = 1.0f;
+        
+        // High-pass filter for punch
+        fireHighPass = fireSource.gameObject.AddComponent<AudioHighPassFilter>();
+        fireHighPass.cutoffFrequency = 150f;
+        fireHighPass.highpassResonanceQ = 1.0f;
+        
+        // Distortion for aggressive sound
+        fireDistortion = fireSource.gameObject.AddComponent<AudioDistortionFilter>();
+        fireDistortion.distortionLevel = 0.15f;
+        
+        // Reverb for environmental feel
+        fireReverb = fireSource.gameObject.AddComponent<AudioReverbFilter>();
+        fireReverb.reverbPreset = AudioReverbPreset.Plain;
+        fireReverb.dryLevel = 200f;
+        fireReverb.room = -500f;
+        fireReverb.roomHF = -200f;
+        fireReverb.decayTime = 0.4f;
+        fireReverb.decayHFRatio = 0.5f;
+        fireReverb.reflectionsLevel = -800;
+        fireReverb.reflectionsDelay = 0.002f;
+        fireReverb.reverbLevel = -400;
+        fireReverb.reverbDelay = 0.008f;
+        fireReverb.diffusion = 100f;
+        fireReverb.density = 100f;
+        
+        // Echo for mechanical feedback
+        fireEcho = fireSource.gameObject.AddComponent<AudioEchoFilter>();
+        fireEcho.delay = 30f;
+        fireEcho.decayRatio = 0.15f;
+        fireEcho.wetMix = 0.08f;
+        fireEcho.dryMix = 1.0f;
+    }
+
+    void UpdateAudio()
+    {
+        // Spin sound (motor) - plays only when barrel is spinning but NOT firing
+        if (spinSource != null && minigunSpinClip != null)
+        {
+            bool shouldPlaySpin = currentSpinProgress > 0.01f && !isFiring;
+            
+            // Start playing spin sound if barrel is rotating and not firing
+            if (shouldPlaySpin && !spinSource.isPlaying)
+            {
+                spinSource.Play();
+            }
+            // Stop spin sound when firing starts or barrel stops
+            else if (!shouldPlaySpin && spinSource.isPlaying)
+            {
+                spinSource.Stop();
+            }
+            
+            // Only adjust pitch/volume when spin sound should be playing
+            if (shouldPlaySpin)
+            {
+                // Smoothly adjust pitch based on spin progress
+                float targetPitch = Mathf.Lerp(spinPitchMin, spinPitchMax, currentSpinProgress);
+                spinSource.pitch = Mathf.Lerp(spinSource.pitch, targetPitch, Time.deltaTime * 5f);
+                
+                // Smoothly adjust volume based on spin progress
+                float targetVolume = baseSpinVolume * Mathf.Clamp01(currentSpinProgress);
+                spinSource.volume = Mathf.Lerp(spinSource.volume, targetVolume, Time.deltaTime * 3f);
+            }
+        }
+
+        // Fire sound - plays only when actually firing (100% spin)
+        if (fireSource != null && minigunFireLoopClip != null)
+        {
+            if (isFiring && !fireSource.isPlaying)
+            {
+                fireSource.Play();
+            }
+            else if (!isFiring && fireSource.isPlaying)
+            {
+                fireSource.Stop();
+            }
+
+            if (isFiring)
+            {
+                // Varying pitch for realism
+                fireSource.pitch = Random.Range(firePitchMin, firePitchMax);
+                fireSource.volume = baseFireVolume + Random.Range(-0.05f, 0.05f);
+                
+                // Dynamic filter adjustment
+                if (fireLowPass != null)
+                {
+                    fireLowPass.cutoffFrequency = Mathf.Lerp(
+                        fireLowPass.cutoffFrequency,
+                        7000f + Random.Range(-500f, 500f),
+                        Time.deltaTime * 10f
+                    );
+                }
+                
+                if (fireDistortion != null)
+                {
+                    fireDistortion.distortionLevel = 0.15f + Random.Range(0f, 0.05f);
+                }
+            }
+        }
     }
 
     void HandleInput()
@@ -138,7 +328,7 @@ public class MinigunController : MonoBehaviour
 
     void Fire()
     {
-        Debug.Log("FIRE!");
+        // Raycast or projectile logic here
     }
 
     void UpdateCameraShake()
@@ -206,6 +396,11 @@ public class MinigunController : MonoBehaviour
             targetRotation,
             Time.deltaTime * 15f
         );
+    }
+
+    void OnDestroy()
+    {
+        // Cleanup is automatic with GameObject destruction
     }
 
     void OnGUI()

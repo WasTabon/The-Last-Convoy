@@ -3295,6 +3295,37 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 545236118}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &551467944
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 551467945}
+  m_Layer: 0
+  m_Name: MainRotorPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &551467945
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 551467944}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 4.186, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4836984657676021}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &560449731
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12108,6 +12139,7 @@ Transform:
   - {fileID: 4781052004799043}
   - {fileID: 4786433862175669}
   - {fileID: 4291180718803117}
+  - {fileID: 551467945}
   - {fileID: 2871558659654014767}
   - {fileID: 4887806721980098341}
   m_Father: {fileID: 0}
@@ -15347,6 +15379,16 @@ MonoBehaviour:
   heightOscillationSpeed: 0.5
   swayAmount: 0.3
   swaySpeed: 1.5
+  mainRotorLoop: {fileID: 8300000, guid: 1ce8140630d34a9409f2d2a1ea613266, type: 3}
+  windLoop: {fileID: 8300000, guid: 17c51a517f1ab3d41ac4b0c58ef632b3, type: 3}
+  baseRotorVolume: 0.7
+  baseTailVolume: 0.4
+  baseWindVolume: 0.3
+  baseEngineVolume: 0.5
+  rotorPitchMin: 0.85
+  rotorPitchMax: 1.15
+  windVolumeBySpeed: 0.5
+  mainRotorPosition: {fileID: 551467945}
   pathColor: {r: 0, g: 1, b: 1, a: 1}
   waypointColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   waypointGizmoSize: 1

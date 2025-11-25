@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MinigunController : MonoBehaviour
@@ -45,6 +46,14 @@ public class MinigunController : MonoBehaviour
     [Header("Audio Positioning")]
     [SerializeField] private Transform muzzlePosition;
 
+    [Header("Raycast Settings")]
+    [SerializeField] private float raycastRange = 500f;
+    [SerializeField] private Transform raycastOrigin;
+    [SerializeField] private LayerMask hitLayers = -1;
+    
+    [Header("Impact Effects")]
+    [SerializeField] private BulletImpactPool impactPool;
+
     private float currentSpinProgress = 0f;
     private bool isSpinning = false;
     private bool isFiring = false;
@@ -68,6 +77,10 @@ public class MinigunController : MonoBehaviour
     private AudioDistortionFilter fireDistortion;
     private AudioReverbFilter fireReverb;
     private AudioEchoFilter fireEcho;
+    
+    // Ignored transforms for raycast
+    private Transform rootTransform;
+    private HashSet<Transform> ignoredTransforms = new HashSet<Transform>();
 
     void Start()
     {
@@ -87,6 +100,7 @@ public class MinigunController : MonoBehaviour
         }
 
         SetupAudio();
+        SetupIgnoredTransforms();
     }
 
     void Update()
@@ -329,6 +343,89 @@ public class MinigunController : MonoBehaviour
     void Fire()
     {
         // Raycast or projectile logic here
+        PerformRaycast();
+    }
+    
+    void SetupIgnoredTransforms()
+    {
+        // Find root transform (highest parent)
+        rootTransform = transform;
+        while (rootTransform.parent != null)
+        {
+            rootTransform = rootTransform.parent;
+        }
+        
+        // Add all children of root to ignored list
+        AddAllChildren(rootTransform);
+        
+        Debug.Log($"Ignoring {ignoredTransforms.Count} transforms for raycast");
+    }
+    
+    void AddAllChildren(Transform parent)
+    {
+        ignoredTransforms.Add(parent);
+        
+        foreach (Transform child in parent)
+        {
+            AddAllChildren(child);
+        }
+    }
+    
+    void PerformRaycast()
+    {
+        if (impactPool == null)
+        {
+            Debug.LogWarning("Impact Pool is not assigned!");
+            return;
+        }
+        
+        // Determine raycast origin
+        Vector3 origin = raycastOrigin != null ? raycastOrigin.position : transform.position;
+        Vector3 direction = raycastOrigin != null ? raycastOrigin.forward : transform.forward;
+        
+        // Perform raycast
+        RaycastHit hit;
+        if (Physics.Raycast(origin, direction, out hit, raycastRange, hitLayers))
+        {
+            // Check if hit object should be ignored
+            if (ShouldIgnoreHit(hit.transform))
+            {
+                // Hit own object, try raycast again from hit point
+                Vector3 newOrigin = hit.point + direction * 0.1f;
+                if (Physics.Raycast(newOrigin, direction, out hit, raycastRange, hitLayers))
+                {
+                    if (!ShouldIgnoreHit(hit.transform))
+                    {
+                        PlayImpactEffect(hit);
+                    }
+                }
+            }
+            else
+            {
+                PlayImpactEffect(hit);
+            }
+        }
+    }
+    
+    bool ShouldIgnoreHit(Transform hitTransform)
+    {
+        // Check if hit transform or any of its parents are in ignored list
+        Transform current = hitTransform;
+        while (current != null)
+        {
+            if (ignoredTransforms.Contains(current))
+            {
+                return true;
+            }
+            current = current.parent;
+        }
+        return false;
+    }
+    
+    void PlayImpactEffect(RaycastHit hit)
+    {
+        // Play impact effect at hit point with surface normal
+        impactPool.PlayImpactEffect(hit.point, hit.normal);
     }
 
     void UpdateCameraShake()

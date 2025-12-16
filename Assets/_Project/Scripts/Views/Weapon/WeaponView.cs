@@ -15,48 +15,58 @@ namespace LastConvoy.Views.Weapon
 
         private WeaponModel _model;
         private WeaponPresenter _presenter;
-        private CameraModel _cameraModel;
         private BulletImpactPool _impactPool;
+        private bool _isInjected;
 
         [Inject]
         public void Construct(
             WeaponModel model,
             WeaponPresenter presenter,
-            CameraModel cameraModel,
             BulletImpactPool impactPool)
         {
             _model = model;
             _presenter = presenter;
-            _cameraModel = cameraModel;
             _impactPool = impactPool;
+            _isInjected = true;
         }
 
         private void OnEnable()
         {
+            if (!_isInjected) return;
+            
             _model.OnFiringStarted += HandleFiringStarted;
             _model.OnFiringStopped += HandleFiringStopped;
             _presenter.OnImpact += HandleImpact;
-            _presenter.OnRecoilChanged += HandleRecoilChanged;
         }
 
         private void OnDisable()
         {
+            if (!_isInjected) return;
+            
             _model.OnFiringStarted -= HandleFiringStarted;
             _model.OnFiringStopped -= HandleFiringStopped;
             _presenter.OnImpact -= HandleImpact;
-            _presenter.OnRecoilChanged -= HandleRecoilChanged;
         }
 
         private void Update()
         {
+            if (!_isInjected) return;
+            
             RotateBarrel();
+            RotateMinigunToCamera();
         }
 
         private void RotateBarrel()
         {
             if (_barrelTransform == null) return;
-
             _barrelTransform.Rotate(0f, 0f, -_model.CurrentBarrelSpeed * Time.deltaTime);
+        }
+
+        private void RotateMinigunToCamera()
+        {
+            if (_minigunTransform == null) return;
+
+            _minigunTransform.rotation = UnityEngine.Camera.main.transform.rotation;
         }
 
         private void HandleFiringStarted()
@@ -77,20 +87,6 @@ namespace LastConvoy.Views.Weapon
             {
                 _impactPool.PlayImpactEffect(position, normal);
             }
-        }
-
-        private void HandleRecoilChanged(Vector3 recoilRotation)
-        {
-            if (_minigunTransform == null) return;
-
-            Quaternion targetRotation = _cameraModel.Rotation *
-                Quaternion.Euler(recoilRotation.x, recoilRotation.y, 0f);
-
-            _minigunTransform.rotation = Quaternion.Slerp(
-                _minigunTransform.rotation,
-                targetRotation,
-                Time.deltaTime * 15f
-            );
         }
     }
 }

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f868181f6632fd845813103475083e2e, type: 3}
+  m_Name: MusicConfig
+  m_EditorClassIdentifier: 
+  <MusicTrack>k__BackingField: {fileID: 8300000, guid: fb45636ae1744d24eaa900c7034eed53,
+    type: 3}
+  <MusicVolume>k__BackingField: 0.5
+  <MasterVolume>k__BackingField: 1
+  <EnableInteriorEffect>k__BackingField: 1
+  <InteriorEffectStrength>k__BackingField: 0.7

@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b06d4c1925d81c847a30bceec63cf177, type: 3}
+  m_Name: WeaponConfig
+  m_EditorClassIdentifier: 
+  spinUpTime: 1.5
+  fireRate: 0.1
+  maxBarrelRotationSpeed: 1800
+  raycastRange: 500
+  hitLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  shakeIntensity: 0.04
+  shakeFrequency: 15
+  recoilRotationAmount: 0
+  recoilFrequency: 0
+  recoilRecoverySpeed: 0
+  spinClip: {fileID: 8300000, guid: b917e4d37416e2f4894b232ca646c6f4, type: 3}
+  fireLoopClip: {fileID: 8300000, guid: 48283adefda01514e851c40517a63d59, type: 3}
+  baseFireVolume: 0.8
+  baseSpinVolume: 0.5
+  firePitchMin: 0.95
+  firePitchMax: 1.05
+  spinPitchMin: 0.5
+  spinPitchMax: 1.2
+  audioMaxDistance: 80
+  audioMinDistance: 3

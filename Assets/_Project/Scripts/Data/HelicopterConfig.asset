@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f0b307323360854b8b70c76af49ae11, type: 3}
+  m_Name: HelicopterConfig
+  m_EditorClassIdentifier: 
+  cruiseSpeed: 20
+  acceleration: 3
+  waypointReachDistance: 8
+  yawSpeed: 0.8
+  bankingSpeed: 1.5
+  bankReturnSpeed: 1
+  maxPitchAngle: 12
+  maxRollAngle: 20
+  pitchSpeed: 1.5
+  heightOscillationAmount: 0.3
+  heightOscillationSpeed: 1.2
+  swayAmount: 0.15
+  swaySpeed: 0.8
+  bladeRotationSpeed: 2000
+  mainRotorLoop: {fileID: 8300000, guid: 1ce8140630d34a9409f2d2a1ea613266, type: 3}
+  windLoop: {fileID: 8300000, guid: 17c51a517f1ab3d41ac4b0c58ef632b3, type: 3}
+  baseRotorVolume: 0.7
+  baseWindVolume: 0.3
+  windVolumeBySpeed: 0.5
+  rotorPitchMin: 0.85
+  rotorPitchMax: 1.15

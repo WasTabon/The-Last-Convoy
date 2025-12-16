@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using LastConvoy.Views.Effects;
 using UnityEngine;
 
 public class MinigunController : MonoBehaviour

@@ -13953,11 +13953,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd0d337d4ad3ed7439f5bd3cd2492904, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  impactEffectPrefab: {fileID: 129639655869443084, guid: c97e0f9c8277fee498d7468be84af025,
-    type: 3}
-  poolSize: 100
-  effectDuration: 1.5
-  poolContainer: {fileID: 0}
 --- !u!1001 &625060592
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -88309,6 +88304,10 @@ PrefabInstance:
     - target: {fileID: 1320275964731592, guid: 0624c6f5a57851d48ba74b4f86ec13d7, type: 3}
       propertyPath: m_Name
       value: FX_Gunshot_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1320275964731592, guid: 0624c6f5a57851d48ba74b4f86ec13d7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1706791323426068, guid: 0624c6f5a57851d48ba74b4f86ec13d7, type: 3}
       propertyPath: m_IsActive
@@ -186433,7 +186432,7 @@ GameObject:
   - component: {fileID: 7742631886545029768}
   - component: {fileID: 7742631886545029767}
   m_Layer: 0
-  m_Name: SM_Wep_Minigun_01
+  m_Name: Minigun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

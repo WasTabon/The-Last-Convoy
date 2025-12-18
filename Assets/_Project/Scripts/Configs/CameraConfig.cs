@@ -9,5 +9,7 @@ namespace LastConvoy.Configs
         
         [field: SerializeField] public float MinVerticalAngle { get; private set; } = -90f;
         [field: SerializeField] public float MaxVerticalAngle { get; private set; } = 90f;
+        [field: SerializeField] public float MinHorizontalAngle { get; private set; } = -90f;
+        [field: SerializeField] public float MaxHorizontalAngle { get; private set; } = 90f;
     }
 }

@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 171b84756b5245842b0423ee5b481f03, type: 3}
   m_Name: CameraConfig
   m_EditorClassIdentifier: 
-  <MouseSensitivity>k__BackingField: 100
-  <MinVerticalAngle>k__BackingField: -90
-  <MaxVerticalAngle>k__BackingField: 90
+  <MouseSensitivity>k__BackingField: 500
+  <MinVerticalAngle>k__BackingField: -40
+  <MaxVerticalAngle>k__BackingField: 40
+  <CanHorizontalMove>k__BackingField: 1
+  <MinHorizontalAngle>k__BackingField: -150
+  <MaxHorizontalAngle>k__BackingField: -30

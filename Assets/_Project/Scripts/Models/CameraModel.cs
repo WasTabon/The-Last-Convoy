@@ -38,6 +38,7 @@ namespace LastConvoy.Models
             XRotation = Mathf.Clamp(XRotation, _config.MinVerticalAngle, _config.MaxVerticalAngle);
 
             YRotation += scaledMouseX;
+            YRotation = Mathf.Clamp(YRotation, _config.MinHorizontalAngle, _config.MaxHorizontalAngle);
 
             UpdateRotation();
         }

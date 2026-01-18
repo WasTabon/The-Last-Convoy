@@ -41,6 +41,8 @@ namespace LastConvoy.Models
 
         public void Update(Vector3 targetWaypointPosition, float deltaTime)
         {
+            if (deltaTime <= 0.0001f) return;
+    
             UpdateSpeed(deltaTime);
             UpdateYawTowardsTarget(targetWaypointPosition, deltaTime);
             UpdatePitchAndRoll(deltaTime);

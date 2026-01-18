@@ -1,12 +1,15 @@
 using UnityEngine;
 using Zenject;
 using LastConvoy.Configs;
+using LastConvoy.StateMachine;
+using LastConvoy.StateMachine.States;
 
 namespace LastConvoy.Views.Audio
 {
     public class MusicView : MonoBehaviour
     {
         private MusicConfig _config;
+        private GameStateMachine _stateMachine;
 
         private AudioSource _musicSource;
         private AudioLowPassFilter _musicLowPass;
@@ -15,21 +18,52 @@ namespace LastConvoy.Views.Audio
         private AudioEchoFilter _musicEcho;
         private AudioChorusFilter _musicChorus;
 
+        private bool _isPaused;
+        private float _targetLowPassFrequency;
+        private const float NORMAL_LOWPASS = 5000f;
+        private const float UNDERWATER_LOWPASS = 400f;
+        private const float FILTER_LERP_SPEED = 8f;
+
         [Inject]
-        public void Construct(MusicConfig config)
+        public void Construct(MusicConfig config, GameStateMachine stateMachine)
         {
             _config = config;
+            _stateMachine = stateMachine;
         }
 
         private void Start()
         {
             SetupAudioSource();
             StartMusic();
+            _targetLowPassFrequency = NORMAL_LOWPASS;
+        }
+
+        private void OnEnable()
+        {
+            if (_stateMachine != null)
+            {
+                _stateMachine.OnStateChanged += HandleStateChanged;
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (_stateMachine != null)
+            {
+                _stateMachine.OnStateChanged -= HandleStateChanged;
+            }
         }
 
         private void Update()
         {
             UpdateFilters();
+            UpdateUnderwaterEffect();
+        }
+
+        private void HandleStateChanged(System.Type stateType)
+        {
+            _isPaused = stateType == typeof(PauseState);
+            _targetLowPassFrequency = _isPaused ? UNDERWATER_LOWPASS : NORMAL_LOWPASS;
         }
 
         private void SetupAudioSource()
@@ -45,6 +79,7 @@ namespace LastConvoy.Views.Audio
             _musicSource.clip = _config.MusicTrack;
             _musicSource.volume = _config.MusicVolume * _config.MasterVolume;
             _musicSource.priority = 64;
+            _musicSource.ignoreListenerPause = true;
 
             ConfigureMusicFilters();
         }
@@ -54,7 +89,7 @@ namespace LastConvoy.Views.Audio
             if (_musicSource == null) return;
 
             _musicLowPass = _musicSource.gameObject.AddComponent<AudioLowPassFilter>();
-            _musicLowPass.cutoffFrequency = 5000f;
+            _musicLowPass.cutoffFrequency = NORMAL_LOWPASS;
             _musicLowPass.lowpassResonanceQ = 1.0f;
 
             _musicHighPass = _musicSource.gameObject.AddComponent<AudioHighPassFilter>();
@@ -99,21 +134,31 @@ namespace LastConvoy.Views.Audio
             }
         }
 
+        private void UpdateUnderwaterEffect()
+        {
+            if (_musicLowPass == null) return;
+
+            float unscaledDeltaTime = Time.unscaledDeltaTime;
+            
+            _musicLowPass.cutoffFrequency = Mathf.Lerp(
+                _musicLowPass.cutoffFrequency,
+                _targetLowPassFrequency,
+                unscaledDeltaTime * FILTER_LERP_SPEED
+            );
+
+            float targetResonance = _isPaused ? 2.0f : 1.0f;
+            _musicLowPass.lowpassResonanceQ = Mathf.Lerp(
+                _musicLowPass.lowpassResonanceQ,
+                targetResonance,
+                unscaledDeltaTime * FILTER_LERP_SPEED
+            );
+        }
+
         private void UpdateFilters()
         {
-            if (!_config.EnableInteriorEffect) return;
+            if (!_config.EnableInteriorEffect || _isPaused) return;
 
             float intensity = _config.InteriorEffectStrength;
-
-            if (_musicLowPass != null)
-            {
-                float targetFreq = Mathf.Lerp(10000f, 4000f, intensity);
-                _musicLowPass.cutoffFrequency = Mathf.Lerp(
-                    _musicLowPass.cutoffFrequency,
-                    targetFreq,
-                    Time.deltaTime * 2f
-                );
-            }
 
             if (_musicReverb != null)
             {

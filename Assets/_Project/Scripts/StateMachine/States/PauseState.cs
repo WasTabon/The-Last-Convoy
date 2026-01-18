@@ -17,6 +17,7 @@ namespace LastConvoy.StateMachine.States
         public void Enter()
         {
             Time.timeScale = 0f;
+            AudioListener.pause = true;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
 

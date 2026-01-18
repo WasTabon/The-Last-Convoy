@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Zenject;
 using LastConvoy.Models;
@@ -28,6 +29,11 @@ namespace LastConvoy.Views.Weapon
             _presenter = presenter;
             _impactPool = impactPool;
             _isInjected = true;
+        }
+
+        private void Start()
+        {
+            if (_muzzleFlash != null) _muzzleFlash.Stop();
         }
 
         private void OnEnable()

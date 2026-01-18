@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98b0011a2567c344b9938ea4c5ca1ade, type: 3}
+  m_Name: EnemyHelicopterConfig
+  m_EditorClassIdentifier: 
+  cruiseSpeed: 15
+  acceleration: 2
+  waypointReachDistance: 10
+  yawSpeed: 0.6
+  bankingSpeed: 1.2
+  bankReturnSpeed: 0.8
+  maxPitchAngle: 10
+  maxRollAngle: 18
+  pitchSpeed: 1.2
+  heightOscillationAmount: 0.25
+  heightOscillationSpeed: 1
+  swayAmount: 0.12
+  swaySpeed: 0.7
+  bladeRotationSpeed: 1800

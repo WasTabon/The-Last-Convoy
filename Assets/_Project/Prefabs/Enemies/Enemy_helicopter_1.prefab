@@ -166,6 +166,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1409127242733903901
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8309846505737676388}
+  m_Layer: 0
+  m_Name: Rotor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8309846505737676388
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1409127242733903901}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 4.13, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6793040829301452970}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2524290880100644370
 GameObject:
   m_ObjectHideFlags: 0
@@ -702,6 +733,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03926fdd3bed2f544a08a9eec795d260, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isMain: 1
 --- !u!1 &5818517642311666153
 GameObject:
   m_ObjectHideFlags: 0
@@ -880,6 +912,7 @@ GameObject:
   - component: {fileID: 6981212906293664210}
   - component: {fileID: 4978149630530114221}
   - component: {fileID: 6695960068570614130}
+  - component: {fileID: 7466904144106900227}
   m_Layer: 0
   m_Name: SM_Veh_Helicopter_Transport_01_Blades_Back
   m_TagString: Untagged
@@ -952,6 +985,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7466904144106900227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6304189586814515456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03926fdd3bed2f544a08a9eec795d260, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isMain: 1
 --- !u!1 &6987035020684972529
 GameObject:
   m_ObjectHideFlags: 0
@@ -969,6 +1015,7 @@ GameObject:
   - component: {fileID: -7914382872668556144}
   - component: {fileID: -313336468110047875}
   - component: {fileID: 577446606881371851}
+  - component: {fileID: 2044312102536611560}
   m_Layer: 0
   m_Name: Enemy_helicopter_1
   m_TagString: Untagged
@@ -999,6 +1046,7 @@ Transform:
   - {fileID: 7933193378983125944}
   - {fileID: 1808614191049035484}
   - {fileID: 3727012488842205995}
+  - {fileID: 8309846505737676388}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8099494541192024955
@@ -1130,7 +1178,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers: []
-  _monoInstallers: []
+  _monoInstallers:
+  - {fileID: -313336468110047875}
   _installerPrefabs: []
   _autoRun: 1
   _kernel: {fileID: 0}
@@ -1160,6 +1209,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654c926dafc4e73468b033482b38ca88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2044312102536611560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6987035020684972529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8465736c23983041a2472128d3ee316, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rotorAudioPosition: {fileID: 8309846505737676388}
 --- !u!1 &7814188849763627378
 GameObject:
   m_ObjectHideFlags: 0

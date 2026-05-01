@@ -113056,12 +113056,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1448504721443799 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6304189586814515456, guid: c8def6b30c31161488010e6305381c07,
-    type: 3}
-  m_PrefabInstance: {fileID: 6814850858300799239}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1448505156041573
 GameObject:
   m_ObjectHideFlags: 0
@@ -125284,19 +125278,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1942241939313897}
   m_Mesh: {fileID: 4300022, guid: 2e4faf3b8e694754dbb16cdb8f277c1b, type: 3}
---- !u!114 &33624961931545580
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1448504721443799}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03926fdd3bed2f544a08a9eec795d260, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isMain: 1
 --- !u!33 &33624962571139929
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -125916,18 +125897,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 43001899435709816, guid: 3b8dd4905c998334aaa56fd1a273fe2a, type: 2}
---- !u!114 &64441296742490487 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: -313336468110047875, guid: c8def6b30c31161488010e6305381c07,
-    type: 3}
-  m_PrefabInstance: {fileID: 6814850858300799239}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26e83e44bd86ec14f8e846f5a9840031, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!64 &64441297176678855
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -175116,16 +175085,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -7914382872668556144, guid: c8def6b30c31161488010e6305381c07,
-        type: 3}
-      propertyPath: _monoInstallers.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -7914382872668556144, guid: c8def6b30c31161488010e6305381c07,
-        type: 3}
-      propertyPath: _monoInstallers.Array.data[0]
-      value: 
-      objectReference: {fileID: 64441296742490487}
     - target: {fileID: -313336468110047875, guid: c8def6b30c31161488010e6305381c07,
         type: 3}
       propertyPath: _waypointsParent
@@ -175189,11 +175148,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6304189586814515456, guid: c8def6b30c31161488010e6305381c07,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 33624961931545580}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c8def6b30c31161488010e6305381c07, type: 3}
 --- !u!1 &6828979067294919158
 GameObject:

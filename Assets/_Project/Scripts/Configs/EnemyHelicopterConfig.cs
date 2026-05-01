@@ -27,6 +27,22 @@ public class EnemyHelicopterConfig : ScriptableObject
     [Header("Blades")]
     [SerializeField] private float bladeRotationSpeed = 1800f;
 
+    [Header("Audio - Rotor")]
+    [SerializeField] private AudioClip rotorLoopClip;
+    [SerializeField] private float rotorBaseVolume = 0.7f;
+    [SerializeField] private float rotorMinPitch = 0.9f;
+    [SerializeField] private float rotorMaxPitch = 1.1f;
+
+    [Header("Audio - 3D Settings")]
+    [SerializeField] private float audioMinDistance = 5f;
+    [SerializeField] private float audioMaxDistance = 150f;
+    [SerializeField] private float audioSpatialBlend = 1f;
+    [SerializeField] private float audioDopplerLevel = 0.3f;
+
+    [Header("Audio - Filters")]
+    [SerializeField] private float lowPassMinFrequency = 2000f;
+    [SerializeField] private float lowPassMaxFrequency = 6000f;
+
     public float CruiseSpeed => cruiseSpeed;
     public float Acceleration => acceleration;
     public float WaypointReachDistance => waypointReachDistance;
@@ -41,4 +57,15 @@ public class EnemyHelicopterConfig : ScriptableObject
     public float SwayAmount => swayAmount;
     public float SwaySpeed => swaySpeed;
     public float BladeRotationSpeed => bladeRotationSpeed;
+
+    public AudioClip RotorLoopClip => rotorLoopClip;
+    public float RotorBaseVolume => rotorBaseVolume;
+    public float RotorMinPitch => rotorMinPitch;
+    public float RotorMaxPitch => rotorMaxPitch;
+    public float AudioMinDistance => audioMinDistance;
+    public float AudioMaxDistance => audioMaxDistance;
+    public float AudioSpatialBlend => audioSpatialBlend;
+    public float AudioDopplerLevel => audioDopplerLevel;
+    public float LowPassMinFrequency => lowPassMinFrequency;
+    public float LowPassMaxFrequency => lowPassMaxFrequency;
 }

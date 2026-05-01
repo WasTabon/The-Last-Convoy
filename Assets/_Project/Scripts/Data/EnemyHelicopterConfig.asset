@@ -26,3 +26,13 @@ MonoBehaviour:
   swayAmount: 0.12
   swaySpeed: 0.7
   bladeRotationSpeed: 1800
+  rotorLoopClip: {fileID: 8300000, guid: 5316f2f51ed543d49936ef9bd4455e51, type: 3}
+  rotorBaseVolume: 0.7
+  rotorMinPitch: 0.9
+  rotorMaxPitch: 1.1
+  audioMinDistance: 5
+  audioMaxDistance: 150
+  audioSpatialBlend: 1
+  audioDopplerLevel: 0.3
+  lowPassMinFrequency: 2000
+  lowPassMaxFrequency: 6000

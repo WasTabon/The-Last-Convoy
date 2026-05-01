@@ -10,6 +10,9 @@ namespace LastConvoy.Configs
         [SerializeField] private float fireRate = 0.1f;
         [SerializeField] private float maxBarrelRotationSpeed = 1800f;
 
+        [Header("Damage")]
+        [SerializeField] private float damagePerShot = 5f;
+
         [Header("Raycast")]
         [SerializeField] private float raycastRange = 500f;
         [SerializeField] private LayerMask hitLayers = -1;
@@ -38,6 +41,7 @@ namespace LastConvoy.Configs
         public float SpinUpTime => spinUpTime;
         public float FireRate => fireRate;
         public float MaxBarrelRotationSpeed => maxBarrelRotationSpeed;
+        public float DamagePerShot => damagePerShot;
         public float RaycastRange => raycastRange;
         public LayerMask HitLayers => hitLayers;
         public float ShakeIntensity => shakeIntensity;

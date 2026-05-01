@@ -95,6 +95,12 @@ namespace LastConvoy.Presenters
             if (Physics.Raycast(ray, out RaycastHit hit, _config.RaycastRange, _config.HitLayers))
             {
                 OnImpact?.Invoke(hit.point, hit.normal);
+
+                IDamageable damageable = hit.collider.GetComponent<IDamageable>();
+                if (damageable != null)
+                {
+                    damageable.TakeDamage(_config.DamagePerShot);
+                }
             }
         }
 

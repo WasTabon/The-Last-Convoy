@@ -5,6 +5,8 @@ public class EnemyHelicopterModel
 {
     public event Action<Vector3> OnPositionChanged;
     public event Action<Quaternion> OnRotationChanged;
+    public event Action<float> OnDamaged;
+    public event Action OnDied;
 
     public Vector3 Position { get; private set; }
     public Quaternion Rotation { get; private set; }
@@ -13,6 +15,11 @@ public class EnemyHelicopterModel
     public float SpeedRatio => _config.CruiseSpeed > 0 ? CurrentSpeed / _config.CruiseSpeed : 0f;
     public float AngularVelocity => _angularVelocity;
     public float TurnIntensity => Mathf.Abs(_angularVelocity) / 30f;
+
+    public float CurrentHealth { get; private set; }
+    public float MaxHealth => _config.MaxHealth;
+    public float HealthRatio => MaxHealth > 0 ? CurrentHealth / MaxHealth : 0f;
+    public bool IsDead { get; private set; }
 
     private readonly EnemyHelicopterConfig _config;
     private Vector3 _currentVelocity;
@@ -26,6 +33,7 @@ public class EnemyHelicopterModel
     public EnemyHelicopterModel(EnemyHelicopterConfig config)
     {
         _config = config;
+        CurrentHealth = _config.MaxHealth;
     }
 
     public void Initialize(Vector3 startPosition, float startYaw)
@@ -33,11 +41,29 @@ public class EnemyHelicopterModel
         Position = startPosition;
         _currentYaw = startYaw;
         Rotation = Quaternion.Euler(0, startYaw, 0);
+        CurrentHealth = _config.MaxHealth;
+        IsDead = false;
+    }
+
+    public void TakeDamage(float damage)
+    {
+        if (IsDead) return;
+
+        CurrentHealth -= damage;
+        OnDamaged?.Invoke(CurrentHealth);
+
+        if (CurrentHealth <= 0)
+        {
+            CurrentHealth = 0;
+            IsDead = true;
+            OnDied?.Invoke();
+        }
     }
 
     public void Update(Vector3 targetWaypointPosition, float deltaTime)
     {
         if (deltaTime <= 0.0001f) return;
+        if (IsDead) return;
 
         UpdateSpeed(deltaTime);
         UpdateYawTowardsTarget(targetWaypointPosition, deltaTime);
@@ -58,6 +84,11 @@ public class EnemyHelicopterModel
     public void MoveToNextWaypoint(int totalWaypoints)
     {
         CurrentWaypointIndex = (CurrentWaypointIndex + 1) % totalWaypoints;
+    }
+
+    public Vector3 GetCurrentVelocity()
+    {
+        return _currentVelocity;
     }
 
     private void UpdateSpeed(float deltaTime)

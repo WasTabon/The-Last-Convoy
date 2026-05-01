@@ -3,6 +3,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "EnemyHelicopterConfig", menuName = "LastConvoy/Configs/EnemyHelicopter")]
 public class EnemyHelicopterConfig : ScriptableObject
 {
+    [Header("Health")]
+    [SerializeField] private float maxHealth = 100f;
+
     [Header("Movement")]
     [SerializeField] private float cruiseSpeed = 15f;
     [SerializeField] private float acceleration = 2f;
@@ -42,6 +45,8 @@ public class EnemyHelicopterConfig : ScriptableObject
     [Header("Audio - Filters")]
     [SerializeField] private float lowPassMinFrequency = 2000f;
     [SerializeField] private float lowPassMaxFrequency = 6000f;
+
+    public float MaxHealth => maxHealth;
 
     public float CruiseSpeed => cruiseSpeed;
     public float Acceleration => acceleration;

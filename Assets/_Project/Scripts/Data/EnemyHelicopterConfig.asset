@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98b0011a2567c344b9938ea4c5ca1ade, type: 3}
   m_Name: EnemyHelicopterConfig
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 500
   cruiseSpeed: 15
   acceleration: 2
   waypointReachDistance: 10

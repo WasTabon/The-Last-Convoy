@@ -1,12 +1,20 @@
 using System;
 using UnityEngine;
 
+public enum EnemyHelicopterState
+{
+    Flying,
+    Crashing
+}
+
 public class EnemyHelicopterModel
 {
     public event Action<Vector3> OnPositionChanged;
     public event Action<Quaternion> OnRotationChanged;
     public event Action<float> OnDamaged;
     public event Action OnDied;
+    public event Action OnCrashStarted;
+    public event Action<Vector3> OnExploded;
 
     public Vector3 Position { get; private set; }
     public Quaternion Rotation { get; private set; }
@@ -20,6 +28,7 @@ public class EnemyHelicopterModel
     public float MaxHealth => _config.MaxHealth;
     public float HealthRatio => MaxHealth > 0 ? CurrentHealth / MaxHealth : 0f;
     public bool IsDead { get; private set; }
+    public EnemyHelicopterState State { get; private set; }
 
     private readonly EnemyHelicopterConfig _config;
     private Vector3 _currentVelocity;
@@ -30,10 +39,15 @@ public class EnemyHelicopterModel
     private float _angularVelocity;
     private float _oscillationTime;
 
+    private float _crashFallSpeed;
+    private float _crashCurrentTilt;
+    private float _crashSpinAngle;
+
     public EnemyHelicopterModel(EnemyHelicopterConfig config)
     {
         _config = config;
         CurrentHealth = _config.MaxHealth;
+        State = EnemyHelicopterState.Flying;
     }
 
     public void Initialize(Vector3 startPosition, float startYaw)
@@ -43,11 +57,16 @@ public class EnemyHelicopterModel
         Rotation = Quaternion.Euler(0, startYaw, 0);
         CurrentHealth = _config.MaxHealth;
         IsDead = false;
+        State = EnemyHelicopterState.Flying;
+        _crashFallSpeed = 0f;
+        _crashCurrentTilt = 0f;
+        _crashSpinAngle = 0f;
     }
 
     public void TakeDamage(float damage)
     {
         if (IsDead) return;
+        if (State == EnemyHelicopterState.Crashing) return;
 
         CurrentHealth -= damage;
         OnDamaged?.Invoke(CurrentHealth);
@@ -56,14 +75,24 @@ public class EnemyHelicopterModel
         {
             CurrentHealth = 0;
             IsDead = true;
+            StartCrashing();
             OnDied?.Invoke();
         }
+    }
+
+    private void StartCrashing()
+    {
+        State = EnemyHelicopterState.Crashing;
+        _crashFallSpeed = 0f;
+        _crashCurrentTilt = 0f;
+        _crashSpinAngle = _currentYaw;
+        OnCrashStarted?.Invoke();
     }
 
     public void Update(Vector3 targetWaypointPosition, float deltaTime)
     {
         if (deltaTime <= 0.0001f) return;
-        if (IsDead) return;
+        if (State != EnemyHelicopterState.Flying) return;
 
         UpdateSpeed(deltaTime);
         UpdateYawTowardsTarget(targetWaypointPosition, deltaTime);
@@ -73,6 +102,34 @@ public class EnemyHelicopterModel
 
         Rotation = Quaternion.Euler(_currentPitch, _currentYaw, _currentRoll);
         OnRotationChanged?.Invoke(Rotation);
+    }
+
+    public void UpdateCrashing(float deltaTime)
+    {
+        if (deltaTime <= 0.0001f) return;
+        if (State != EnemyHelicopterState.Crashing) return;
+
+        _crashFallSpeed += _config.CrashFallAcceleration * deltaTime;
+        _crashFallSpeed = Mathf.Min(_crashFallSpeed, _config.CrashMaxFallSpeed);
+
+        _crashSpinAngle += _config.CrashSpinSpeed * deltaTime;
+
+        _crashCurrentTilt = Mathf.Lerp(_crashCurrentTilt, _config.CrashTiltAngle, deltaTime * _config.CrashTiltSpeed);
+
+        Vector3 horizontalVelocity = new Vector3(_currentVelocity.x, 0, _currentVelocity.z);
+        horizontalVelocity *= 0.98f;
+        _currentVelocity = new Vector3(horizontalVelocity.x, -_crashFallSpeed, horizontalVelocity.z);
+
+        Position += _currentVelocity * deltaTime;
+        OnPositionChanged?.Invoke(Position);
+
+        Rotation = Quaternion.Euler(_crashCurrentTilt, _crashSpinAngle, _crashCurrentTilt * 0.5f);
+        OnRotationChanged?.Invoke(Rotation);
+    }
+
+    public void Explode()
+    {
+        OnExploded?.Invoke(Position);
     }
 
     public bool HasReachedWaypoint(Vector3 waypointPosition)

@@ -41,6 +41,20 @@ public class EnemyHelicopterPresenter : IInitializable, ITickable
 
     public void Tick()
     {
+        float deltaTime = Time.deltaTime;
+
+        if (_model.State == EnemyHelicopterState.Flying)
+        {
+            UpdateFlying(deltaTime);
+        }
+        else if (_model.State == EnemyHelicopterState.Crashing)
+        {
+            UpdateCrashing(deltaTime);
+        }
+    }
+
+    private void UpdateFlying(float deltaTime)
+    {
         if (_waypoints.Count < 2) return;
 
         Transform currentWaypoint = _waypoints[_model.CurrentWaypointIndex];
@@ -51,6 +65,11 @@ public class EnemyHelicopterPresenter : IInitializable, ITickable
         }
 
         Transform targetWaypoint = _waypoints[_model.CurrentWaypointIndex];
-        _model.Update(targetWaypoint.position, Time.deltaTime);
+        _model.Update(targetWaypoint.position, deltaTime);
+    }
+
+    private void UpdateCrashing(float deltaTime)
+    {
+        _model.UpdateCrashing(deltaTime);
     }
 }

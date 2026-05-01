@@ -30,6 +30,19 @@ public class EnemyHelicopterConfig : ScriptableObject
     [Header("Blades")]
     [SerializeField] private float bladeRotationSpeed = 1800f;
 
+    [Header("Crash")]
+    [SerializeField] private float crashFallAcceleration = 15f;
+    [SerializeField] private float crashMaxFallSpeed = 30f;
+    [SerializeField] private float crashSpinSpeed = 180f;
+    [SerializeField] private float crashTiltAngle = 25f;
+    [SerializeField] private float crashTiltSpeed = 2f;
+    [SerializeField] private float crashAudioFadeDuration = 1.5f;
+
+    [Header("Explosion")]
+    [SerializeField] private GameObject explosionPrefab;
+    [SerializeField] private AudioClip explosionClip;
+    [SerializeField] private float explosionVolume = 1f;
+
     [Header("Audio - Rotor")]
     [SerializeField] private AudioClip rotorLoopClip;
     [SerializeField] private float rotorBaseVolume = 0.7f;
@@ -62,6 +75,16 @@ public class EnemyHelicopterConfig : ScriptableObject
     public float SwayAmount => swayAmount;
     public float SwaySpeed => swaySpeed;
     public float BladeRotationSpeed => bladeRotationSpeed;
+
+    public float CrashFallAcceleration => crashFallAcceleration;
+    public float CrashMaxFallSpeed => crashMaxFallSpeed;
+    public float CrashSpinSpeed => crashSpinSpeed;
+    public float CrashTiltAngle => crashTiltAngle;
+    public float CrashTiltSpeed => crashTiltSpeed;
+    public float CrashAudioFadeDuration => crashAudioFadeDuration;
+    public GameObject ExplosionPrefab => explosionPrefab;
+    public AudioClip ExplosionClip => explosionClip;
+    public float ExplosionVolume => explosionVolume;
 
     public AudioClip RotorLoopClip => rotorLoopClip;
     public float RotorBaseVolume => rotorBaseVolume;

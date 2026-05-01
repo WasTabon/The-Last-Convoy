@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98b0011a2567c344b9938ea4c5ca1ade, type: 3}
   m_Name: EnemyHelicopterConfig
   m_EditorClassIdentifier: 
+  maxHealth: 100
   cruiseSpeed: 15
   acceleration: 2
   waypointReachDistance: 10
@@ -26,6 +27,16 @@ MonoBehaviour:
   swayAmount: 0.12
   swaySpeed: 0.7
   bladeRotationSpeed: 1800
+  crashFallAcceleration: 15
+  crashMaxFallSpeed: 30
+  crashSpinSpeed: 180
+  crashTiltAngle: 25
+  crashTiltSpeed: 2
+  crashAudioFadeDuration: 1.5
+  explosionPrefab: {fileID: 6466630632557034640, guid: 0dd3b534f231bbf47b1814ccd5fa3496,
+    type: 3}
+  explosionClip: {fileID: 8300000, guid: 2623d7aa6750f2645a5da1a69c76f8d3, type: 3}
+  explosionVolume: 1
   rotorLoopClip: {fileID: 8300000, guid: 5316f2f51ed543d49936ef9bd4455e51, type: 3}
   rotorBaseVolume: 0.7
   rotorMinPitch: 0.9

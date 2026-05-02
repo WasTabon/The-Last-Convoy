@@ -11,5 +11,8 @@ namespace LastConvoy.Services.Input
         float MouseX { get; }
         float MouseY { get; }
         bool IsFireHeld { get; }
+
+        float Vertical { get; }
+        float Horizontal { get; }
     }
 }

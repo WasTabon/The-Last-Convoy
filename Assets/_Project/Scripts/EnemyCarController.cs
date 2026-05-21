@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class EnemyCarController : MonoBehaviour
+public class EnemyCarController : MonoBehaviour, IDamageable
 {
     [Header("References")]
     [SerializeField] private Transform _playerCar;
@@ -18,12 +18,21 @@ public class EnemyCarController : MonoBehaviour
     [SerializeField] private float _maxDistanceFromPlayer = 40f;
     [SerializeField] private float _speedAdjustmentRate = 5f;
 
+    [Header("Health")]
+    [SerializeField] private float _maxHealth = 100f;
+
     [Header("Combat")]
     [SerializeField] private float _attackRange = 30f;
     [SerializeField] private float _fireRate = 0.5f;
     [SerializeField] private ParticleSystem _muzzleFlash;
     [SerializeField] private AudioClip _fireSound;
     [SerializeField] private float _fireVolume = 0.8f;
+
+    [Header("Death")]
+    [SerializeField] private GameObject _explosionPrefab;
+    [SerializeField] private AudioClip _explosionSound;
+    [SerializeField] private float _explosionVolume = 1f;
+    [SerializeField] private float _destroyDelay = 0.1f;
 
     [Header("Wheels")]
     [SerializeField] private float _wheelRotationSpeed = 360f;
@@ -45,6 +54,7 @@ public class EnemyCarController : MonoBehaviour
     public float FireRate => _fireRate;
     public EnemyCarDrivingState DrivingState { get; private set; }
     public EnemyCarAttackingState AttackingState { get; private set; }
+    public EnemyCarDeadState DeadState { get; private set; }
 
     private Rigidbody _rigidbody;
     private AudioSource _audioSource;
@@ -57,6 +67,8 @@ public class EnemyCarController : MonoBehaviour
     private bool _isGrounded;
     private Vector3 _groundNormal = Vector3.up;
     private float _groundDistance;
+    private float _currentHealth;
+    private bool _isDead;
 
     private void Awake()
     {
@@ -68,6 +80,7 @@ public class EnemyCarController : MonoBehaviour
         _currentSpeed = _speed;
         _targetSpeed = _speed;
         _targetDirection = transform.forward;
+        _currentHealth = _maxHealth;
 
         SetupAudio();
         SetupStates();
@@ -99,6 +112,9 @@ public class EnemyCarController : MonoBehaviour
 
         AttackingState = new EnemyCarAttackingState();
         AttackingState.SetController(this);
+
+        DeadState = new EnemyCarDeadState();
+        DeadState.SetController(this);
     }
 
     private void SetupWaypoints()
@@ -123,12 +139,14 @@ public class EnemyCarController : MonoBehaviour
 
     private void Update()
     {
+        if (_isDead) return;
         _currentState?.Update();
         UpdateWheels();
     }
 
     private void FixedUpdate()
     {
+        if (_isDead) return;
         if (_waypoints == null || _waypoints.Length < 2) return;
 
         CheckGround();
@@ -140,6 +158,36 @@ public class EnemyCarController : MonoBehaviour
         {
             ApplyExtraGravityInternal();
         }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        if (_isDead) return;
+
+        _currentHealth -= damage;
+
+        if (_currentHealth <= 0)
+        {
+            _currentHealth = 0;
+            ChangeState(DeadState);
+        }
+    }
+
+    public void OnDeath()
+    {
+        _isDead = true;
+
+        if (_explosionPrefab != null)
+        {
+            Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+        }
+
+        if (_explosionSound != null)
+        {
+            AudioSource.PlayClipAtPoint(_explosionSound, transform.position, _explosionVolume);
+        }
+
+        Destroy(gameObject, _destroyDelay);
     }
 
     private void CheckGround()

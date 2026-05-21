@@ -2727,11 +2727,17 @@ MonoBehaviour:
   _minDistanceFromPlayer: 15
   _maxDistanceFromPlayer: 40
   _speedAdjustmentRate: 5
+  _maxHealth: 100
   _attackRange: 30
   _fireRate: 0.5
   _muzzleFlash: {fileID: 270765581}
   _fireSound: {fileID: 8300000, guid: bebf8266f06b86d4eb3cc9f9bb2d46bd, type: 3}
   _fireVolume: 0.8
+  _explosionPrefab: {fileID: 6466630632557034640, guid: 0dd3b534f231bbf47b1814ccd5fa3496,
+    type: 3}
+  _explosionSound: {fileID: 8300000, guid: 2623d7aa6750f2645a5da1a69c76f8d3, type: 3}
+  _explosionVolume: 1
+  _destroyDelay: 0.1
   _wheelRotationSpeed: 360
   _hoverHeight: 0.5
   _hoverForce: 50

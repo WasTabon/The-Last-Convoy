@@ -9,6 +9,10 @@ public class PlayerCarInstaller : MonoInstaller
 
     [Header("Turret Config")]
     [SerializeField] private TurretConfig _turretConfig;
+    [SerializeField] private TurretWeaponConfig _turretWeaponConfig;
+
+    [Header("References")]
+    [SerializeField] private Camera _mainCamera;
 
     public override void InstallBindings()
     {
@@ -30,16 +34,36 @@ public class PlayerCarInstaller : MonoInstaller
             return;
         }
 
+        if (_turretWeaponConfig == null)
+        {
+            Debug.LogError("[PlayerCarInstaller] Turret Weapon Config is not assigned!");
+            return;
+        }
+
+        if (_mainCamera == null)
+        {
+            _mainCamera = Camera.main;
+            if (_mainCamera == null)
+            {
+                Debug.LogError("[PlayerCarInstaller] Main Camera not found!");
+                return;
+            }
+        }
+
         Container.Bind<PlayerCarConfig>().FromInstance(_config).AsSingle();
         Container.Bind<PlayerCarCameraConfig>().FromInstance(_cameraConfig).AsSingle();
         Container.Bind<TurretConfig>().FromInstance(_turretConfig).AsSingle();
+        Container.Bind<TurretWeaponConfig>().FromInstance(_turretWeaponConfig).AsSingle();
+        Container.Bind<Camera>().FromInstance(_mainCamera).AsSingle();
 
         Container.Bind<Transform>().WithId("PlayerCarTransform").FromInstance(transform).AsSingle();
 
         Container.Bind<PlayerCarModel>().AsSingle();
         Container.Bind<TurretModel>().AsSingle();
+        Container.Bind<TurretWeaponModel>().AsSingle();
 
         Container.BindInterfacesAndSelfTo<PlayerCarPresenter>().AsSingle();
         Container.BindInterfacesAndSelfTo<TurretPresenter>().AsSingle();
+        Container.BindInterfacesAndSelfTo<TurretWeaponPresenter>().AsSingle();
     }
 }

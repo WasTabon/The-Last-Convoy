@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d60b776a005e914bb6e4de4a68dfa9e, type: 3}
+  m_Name: TurretWeaponConfig
+  m_EditorClassIdentifier: 
+  fireRate: 0.2
+  damagePerShot: 10
+  raycastRange: 300
+  hitLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  fireClip: {fileID: 8300000, guid: bebf8266f06b86d4eb3cc9f9bb2d46bd, type: 3}
+  fireVolume: 0.8
+  firePitchMin: 0.95
+  firePitchMax: 1.05
+  crosshairColor: {r: 1, g: 1, b: 1, a: 1}
+  crosshairSize: 20
+  crosshairThickness: 2
+  crosshairGap: 8

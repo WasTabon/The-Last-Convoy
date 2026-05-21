@@ -17,4 +17,4 @@ MonoBehaviour:
   shakeFrequency: 5
   maxShakeAmount: 0.02
   tiltAmountByTurn: 2
-  tiltSmoothing: 5
+  tiltSmoothing: 50

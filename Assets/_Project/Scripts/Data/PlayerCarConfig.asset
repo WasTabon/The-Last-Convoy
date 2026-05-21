@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55a27db320d57ed4bb017cb9d0b5ab82, type: 3}
   m_Name: PlayerCarConfig
   m_EditorClassIdentifier: 
-  maxForwardSpeed: 25
+  maxForwardSpeed: 40
   maxReverseSpeed: 10
   acceleration: 15
   brakeForce: 20

@@ -2721,7 +2721,7 @@ MonoBehaviour:
   - {fileID: 1169700531}
   - {fileID: 1772116473}
   - {fileID: 0}
-  _speed: 30
+  _speed: 50
   _rotationSpeed: 5
   _waypointReachDistance: 5
   _minDistanceFromPlayer: 15

@@ -69,6 +69,7 @@ public class EnemyCarController : MonoBehaviour, IDamageable
     private float _groundDistance;
     private float _currentHealth;
     private bool _isDead;
+    private bool _isInitialized;
 
     private void Awake()
     {
@@ -88,8 +89,21 @@ public class EnemyCarController : MonoBehaviour, IDamageable
 
     private void Start()
     {
-        SetupWaypoints();
+        if (!_isInitialized)
+        {
+            SetupWaypoints();
+        }
         ChangeState(DrivingState);
+    }
+
+    public void Initialize(Transform playerCar, Transform waypointsParent, int startWaypointIndex)
+    {
+        _playerCar = playerCar;
+        _waypointsParent = waypointsParent;
+        _currentWaypointIndex = startWaypointIndex;
+
+        SetupWaypoints();
+        _isInitialized = true;
     }
 
     private void SetupAudio()
@@ -246,6 +260,8 @@ public class EnemyCarController : MonoBehaviour, IDamageable
 
     public void UpdateWaypointProgress()
     {
+        if (_waypoints == null || _waypoints.Length == 0) return;
+
         Transform currentWaypoint = _waypoints[_currentWaypointIndex];
         Vector3 toWaypoint = currentWaypoint.position - transform.position;
         toWaypoint.y = 0;
@@ -278,6 +294,8 @@ public class EnemyCarController : MonoBehaviour, IDamageable
 
     public void UpdateTargetDirection()
     {
+        if (_waypoints == null || _waypoints.Length == 0) return;
+
         Transform targetWaypoint = _waypoints[_currentWaypointIndex];
         Vector3 direction = targetWaypoint.position - transform.position;
         direction.y = 0;

@@ -2733,11 +2733,15 @@ MonoBehaviour:
   _fireSound: {fileID: 8300000, guid: bebf8266f06b86d4eb3cc9f9bb2d46bd, type: 3}
   _fireVolume: 0.8
   _wheelRotationSpeed: 360
-  _extraGravity: 30
+  _hoverHeight: 0.5
+  _hoverForce: 50
+  _hoverDamping: 5
   _groundCheckDistance: 1.5
   _groundMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  _alignToGroundSpeed: 8
+  _extraGravity: 30
 --- !u!65 &1306874589
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9214,13 +9218,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69f40bddcf0a3004cb2f61cd3f9dace1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _extraGravity: 30
+  _hoverHeight: 1
+  _hoverForce: 50
+  _hoverDamping: 5
   _groundCheckDistance: 1.5
-  _hoverHeight: 0.1
-  _alignToGroundSpeed: 10
   _groundMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  _alignToGroundSpeed: 10
+  _extraGravity: 30
 --- !u!114 &633832905590022328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9304,7 +9310,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 588734027938184992}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 33ad0724089c8fb4eaaf7665cc27e4bd, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

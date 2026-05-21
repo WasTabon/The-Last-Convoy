@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: PlayerCarCameraConfig
   m_EditorClassIdentifier: 
   cameraOffset: {x: -0.3, y: 1.4, z: 0.3}
-  shakeAmountBySpeed: 0.02
-  shakeFrequency: 15
-  maxShakeAmount: 0.05
+  shakeAmountBySpeed: 0.01
+  shakeFrequency: 5
+  maxShakeAmount: 0.02
   tiltAmountByTurn: 2
   tiltSmoothing: 5

@@ -3,41 +3,34 @@ using UnityEngine;
 
 public class PlayerCarModel
 {
-    public event Action<Vector3> OnPositionChanged;
-    public event Action<Quaternion> OnRotationChanged;
     public event Action<float> OnSpeedChanged;
 
-    public Vector3 Position { get; private set; }
-    public Quaternion Rotation { get; private set; }
     public float CurrentSpeed { get; private set; }
+    public float CurrentTurnInput { get; private set; }
     public float SpeedRatio => Mathf.Abs(CurrentSpeed) / _config.MaxForwardSpeed;
     public bool IsMovingForward => CurrentSpeed > 0.1f;
     public bool IsMovingBackward => CurrentSpeed < -0.1f;
     public bool IsStationary => Mathf.Abs(CurrentSpeed) <= 0.1f;
 
     private readonly PlayerCarConfig _config;
-    private float _currentYaw;
 
     public PlayerCarModel(PlayerCarConfig config)
     {
         _config = config;
     }
 
-    public void Initialize(Vector3 startPosition, Quaternion startRotation)
+    public void Initialize()
     {
-        Position = startPosition;
-        Rotation = startRotation;
-        _currentYaw = startRotation.eulerAngles.y;
         CurrentSpeed = 0f;
+        CurrentTurnInput = 0f;
     }
 
     public void Update(float verticalInput, float horizontalInput, float deltaTime)
     {
         if (deltaTime <= 0.0001f) return;
 
+        CurrentTurnInput = horizontalInput;
         UpdateSpeed(verticalInput, deltaTime);
-        UpdateRotation(horizontalInput, deltaTime);
-        UpdatePosition(deltaTime);
     }
 
     private void UpdateSpeed(float verticalInput, float deltaTime)
@@ -88,32 +81,19 @@ public class PlayerCarModel
         }
     }
 
-    private void UpdateRotation(float horizontalInput, float deltaTime)
+    public float GetTurnAmount(float deltaTime)
     {
-        if (Mathf.Abs(CurrentSpeed) < _config.MinSpeedToTurn) return;
-        if (Mathf.Abs(horizontalInput) < 0.01f) return;
+        if (Mathf.Abs(CurrentSpeed) < _config.MinSpeedToTurn) return 0f;
+        if (Mathf.Abs(CurrentTurnInput) < 0.01f) return 0f;
 
         float speedFactor = 1f - (SpeedRatio * _config.TurnSpeedReduction);
-        float turnAmount = horizontalInput * _config.TurnSpeed * speedFactor * deltaTime;
+        float turnAmount = CurrentTurnInput * _config.TurnSpeed * speedFactor * deltaTime;
 
         if (CurrentSpeed < 0)
         {
             turnAmount = -turnAmount;
         }
 
-        _currentYaw += turnAmount;
-        Rotation = Quaternion.Euler(0f, _currentYaw, 0f);
-        OnRotationChanged?.Invoke(Rotation);
-    }
-
-    private void UpdatePosition(float deltaTime)
-    {
-        if (Mathf.Abs(CurrentSpeed) < 0.01f) return;
-
-        Vector3 forward = Rotation * Vector3.forward;
-        Vector3 movement = forward * CurrentSpeed * deltaTime;
-
-        Position += movement;
-        OnPositionChanged?.Invoke(Position);
+        return turnAmount;
     }
 }

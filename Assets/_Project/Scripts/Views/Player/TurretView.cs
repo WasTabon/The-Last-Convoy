@@ -7,11 +7,15 @@ public class TurretView : MonoBehaviour
     [SerializeField] private Transform _verticalPivot;
 
     private TurretModel _model;
+    private bool _isInjected;
 
     [Inject]
     public void Construct(TurretModel model)
     {
         _model = model;
+        _isInjected = true;
+        
+        _model.OnAnglesChanged += HandleAnglesChanged;
     }
 
     private void Start()
@@ -27,14 +31,12 @@ public class TurretView : MonoBehaviour
         }
     }
 
-    private void OnEnable()
+    private void OnDestroy()
     {
-        _model.OnAnglesChanged += HandleAnglesChanged;
-    }
-
-    private void OnDisable()
-    {
-        _model.OnAnglesChanged -= HandleAnglesChanged;
+        if (_isInjected && _model != null)
+        {
+            _model.OnAnglesChanged -= HandleAnglesChanged;
+        }
     }
 
     private void HandleAnglesChanged(float horizontalAngle, float verticalAngle)

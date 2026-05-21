@@ -9,29 +9,20 @@ public class PlayerCarPresenter : IInitializable, ITickable
     private readonly PlayerCarModel _model;
     private readonly IInputService _inputService;
     private readonly GameStateMachine _stateMachine;
-    private readonly Transform _carTransform;
 
     public PlayerCarPresenter(
         PlayerCarModel model,
         IInputService inputService,
-        GameStateMachine stateMachine,
-        [Inject(Id = "PlayerCarTransform")] Transform carTransform)
+        GameStateMachine stateMachine)
     {
         _model = model;
         _inputService = inputService;
         _stateMachine = stateMachine;
-        _carTransform = carTransform;
     }
 
     public void Initialize()
     {
-        if (_carTransform == null)
-        {
-            Debug.LogError("[PlayerCarPresenter] Car Transform is not assigned!");
-            return;
-        }
-
-        _model.Initialize(_carTransform.position, _carTransform.rotation);
+        _model.Initialize();
     }
 
     public void Tick()

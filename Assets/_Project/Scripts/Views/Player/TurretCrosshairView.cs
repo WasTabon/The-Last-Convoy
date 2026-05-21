@@ -8,6 +8,7 @@ public class TurretCrosshairView : MonoBehaviour
 
     private TurretWeaponConfig _config;
     private Camera _camera;
+    private bool _isInjected;
 
     private Canvas _canvas;
     private RectTransform _crosshairContainer;
@@ -21,16 +22,21 @@ public class TurretCrosshairView : MonoBehaviour
     {
         _config = config;
         _camera = camera;
+        _isInjected = true;
     }
 
-    private void Awake()
+    private void Start()
     {
+        if (!_isInjected) return;
+
         SetupCanvas();
         CreateCrosshair();
     }
 
     private void LateUpdate()
     {
+        if (!_isInjected) return;
+
         UpdateCrosshairPosition();
     }
 
@@ -88,6 +94,7 @@ public class TurretCrosshairView : MonoBehaviour
     private void UpdateCrosshairPosition()
     {
         if (_camera == null) return;
+        if (_crosshairContainer == null) return;
 
         Vector3 aimWorldPosition;
 
@@ -124,10 +131,10 @@ public class TurretCrosshairView : MonoBehaviour
 
     private void SetCrosshairVisible(bool visible)
     {
-        _topLine.enabled = visible;
-        _bottomLine.enabled = visible;
-        _leftLine.enabled = visible;
-        _rightLine.enabled = visible;
+        if (_topLine != null) _topLine.enabled = visible;
+        if (_bottomLine != null) _bottomLine.enabled = visible;
+        if (_leftLine != null) _leftLine.enabled = visible;
+        if (_rightLine != null) _rightLine.enabled = visible;
     }
 
     private void UpdateCrosshairAppearance()

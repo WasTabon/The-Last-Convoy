@@ -55,7 +55,6 @@ public class PlayerCarInstaller : MonoInstaller
         Container.Bind<TurretConfig>().FromInstance(_turretConfig).AsSingle();
         Container.Bind<TurretWeaponConfig>().FromInstance(_turretWeaponConfig).AsSingle();
         Container.Bind<Camera>().FromInstance(_mainCamera).AsSingle();
-
         Container.Bind<Transform>().WithId("PlayerCarTransform").FromInstance(transform).AsSingle();
 
         Container.Bind<PlayerCarModel>().AsSingle();

@@ -5,6 +5,7 @@ public class PlayerCarCameraView : MonoBehaviour
 {
     private PlayerCarModel _model;
     private PlayerCarCameraConfig _config;
+    private bool _isInjected;
 
     private Vector3 _baseLocalPosition;
     private float _shakePhase;
@@ -15,10 +16,13 @@ public class PlayerCarCameraView : MonoBehaviour
     {
         _model = model;
         _config = config;
+        _isInjected = true;
     }
 
     private void Start()
     {
+        if (!_isInjected) return;
+
         _baseLocalPosition = _config.CameraOffset;
         transform.localPosition = _baseLocalPosition;
         transform.localRotation = Quaternion.identity;
@@ -29,6 +33,8 @@ public class PlayerCarCameraView : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (!_isInjected) return;
+
         UpdateShake();
         UpdateTilt();
     }

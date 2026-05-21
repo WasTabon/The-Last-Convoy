@@ -13,6 +13,7 @@ public class TurretWeaponView : MonoBehaviour
     private TurretWeaponPresenter _presenter;
     private TurretWeaponConfig _config;
     private AudioSource _fireSource;
+    private bool _isInjected;
 
     [Inject]
     public void Construct(TurretWeaponModel model, TurretWeaponPresenter presenter, TurretWeaponConfig config)
@@ -20,14 +21,36 @@ public class TurretWeaponView : MonoBehaviour
         _model = model;
         _presenter = presenter;
         _config = config;
-    }
-
-    private void Awake()
-    {
-        SetupAudio();
+        _isInjected = true;
     }
 
     private void Start()
+    {
+        if (!_isInjected) return;
+
+        SetupAudio();
+        SetupAimPoint();
+
+        _model.OnFired += HandleFired;
+        _presenter.OnImpact += HandleImpact;
+    }
+
+    private void OnDestroy()
+    {
+        if (!_isInjected) return;
+
+        if (_model != null)
+        {
+            _model.OnFired -= HandleFired;
+        }
+
+        if (_presenter != null)
+        {
+            _presenter.OnImpact -= HandleImpact;
+        }
+    }
+
+    private void SetupAimPoint()
     {
         if (_aimPoint != null)
         {
@@ -41,18 +64,6 @@ public class TurretWeaponView : MonoBehaviour
         {
             Debug.LogError("[TurretWeaponView] AimPoint and MuzzlePosition are not assigned!");
         }
-    }
-
-    private void OnEnable()
-    {
-        _model.OnFired += HandleFired;
-        _presenter.OnImpact += HandleImpact;
-    }
-
-    private void OnDisable()
-    {
-        _model.OnFired -= HandleFired;
-        _presenter.OnImpact -= HandleImpact;
     }
 
     private void SetupAudio()

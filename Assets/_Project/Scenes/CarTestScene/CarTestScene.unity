@@ -748,6 +748,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 801739274}
+  - component: {fileID: 801739275}
   m_Layer: 0
   m_Name: VerticalPivot
   m_TagString: Untagged
@@ -771,6 +772,20 @@ Transform:
   - {fileID: 9146272880454405589}
   m_Father: {fileID: 293146290}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &801739275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 801739273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77a37a6a6ab9e584eafb13c6ed262572, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _recoilDistance: 0.2
+  _returnSpeed: 15
 --- !u!1 &828590305
 GameObject:
   m_ObjectHideFlags: 0
@@ -3132,6 +3147,7 @@ GameObject:
   - component: {fileID: 585603895599901002}
   - component: {fileID: 601295003441286548}
   - component: {fileID: 611763734221974728}
+  - component: {fileID: 611763734221974729}
   m_Layer: 0
   m_Name: SM_Veh_Ute_01_SteeringW
   m_TagString: Untagged
@@ -3319,6 +3335,7 @@ GameObject:
   - component: {fileID: 633832905590022331}
   - component: {fileID: 633832905590022332}
   - component: {fileID: 633832905590022333}
+  - component: {fileID: 633832905590022334}
   m_Layer: 0
   m_Name: PlayerCar
   m_TagString: Untagged
@@ -6626,6 +6643,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &611763734221974729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 588510203395546542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9c53c4be7662cc40be5089cdf66868b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxRotationAngle: 90
+  _rotationSpeed: 10
 --- !u!23 &611765111477902964
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7265,6 +7296,25 @@ MonoBehaviour:
   _lowPassCutoff: 10000
   _highPassCutoff: 50
   _distortionLevel: 0.1
+--- !u!114 &633832905590022334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 588734027938184992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da9e07079f40c4b47ae7116b0a24385b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _engineIdleLoop: {fileID: 8300000, guid: bcea792c05efec34b90a1ff48fffea78, type: 3}
+  _baseVolume: 0.5
+  _pitchMin: 0.8
+  _pitchMax: 1.5
+  _volumeMin: 0.4
+  _volumeMax: 0.7
+  _maxSpeed: 25
 --- !u!95 &683370426192529118
 Animator:
   serializedVersion: 5

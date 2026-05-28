@@ -70,19 +70,16 @@ public class MinigunController : MonoBehaviour
     
     private Vector3 minigunRotationRecoil = Vector3.zero;
     private float recoilPhase = 0f;
-
-    // Audio sources
+    
     private AudioSource spinSource;
     private AudioSource fireSource;
     
-    // Audio filters
     private AudioLowPassFilter fireLowPass;
     private AudioHighPassFilter fireHighPass;
     private AudioDistortionFilter fireDistortion;
     private AudioReverbFilter fireReverb;
     private AudioEchoFilter fireEcho;
     
-    // Ignored transforms for raycast
     private Transform rootTransform;
     private HashSet<Transform> ignoredTransforms = new HashSet<Transform>();
 
@@ -121,7 +118,6 @@ public class MinigunController : MonoBehaviour
 
     void SetupAudio()
     {
-        // Spin sound (motor spinning up/down)
         spinSource = CreateAudioSource("Spin", muzzlePosition);
         spinSource.spatialBlend = 0.8f;
         spinSource.volume = 0f;
@@ -131,7 +127,6 @@ public class MinigunController : MonoBehaviour
         spinSource.clip = minigunSpinClip;
         spinSource.loop = true;
 
-        // Fire loop sound
         fireSource = CreateAudioSource("Fire", muzzlePosition);
         ConfigureFireAudio();
     }
@@ -179,21 +174,17 @@ public class MinigunController : MonoBehaviour
         fireSource.maxDistance = maxDistance;
         fireSource.priority = 32;
         
-        // Low-pass filter for distance muffling
         fireLowPass = fireSource.gameObject.AddComponent<AudioLowPassFilter>();
         fireLowPass.cutoffFrequency = 8000f;
         fireLowPass.lowpassResonanceQ = 1.0f;
         
-        // High-pass filter for punch
         fireHighPass = fireSource.gameObject.AddComponent<AudioHighPassFilter>();
         fireHighPass.cutoffFrequency = 150f;
         fireHighPass.highpassResonanceQ = 1.0f;
         
-        // Distortion for aggressive sound
         fireDistortion = fireSource.gameObject.AddComponent<AudioDistortionFilter>();
         fireDistortion.distortionLevel = 0.15f;
         
-        // Reverb for environmental feel
         fireReverb = fireSource.gameObject.AddComponent<AudioReverbFilter>();
         fireReverb.reverbPreset = AudioReverbPreset.Plain;
         fireReverb.dryLevel = 200f;
@@ -207,8 +198,7 @@ public class MinigunController : MonoBehaviour
         fireReverb.reverbDelay = 0.008f;
         fireReverb.diffusion = 100f;
         fireReverb.density = 100f;
-        
-        // Echo for mechanical feedback
+
         fireEcho = fireSource.gameObject.AddComponent<AudioEchoFilter>();
         fireEcho.delay = 30f;
         fireEcho.decayRatio = 0.15f;
@@ -218,36 +208,30 @@ public class MinigunController : MonoBehaviour
 
     void UpdateAudio()
     {
-        // Spin sound (motor) - plays only when barrel is spinning but NOT firing
         if (spinSource != null && minigunSpinClip != null)
         {
             bool shouldPlaySpin = currentSpinProgress > 0.01f && !isFiring;
             
-            // Start playing spin sound if barrel is rotating and not firing
             if (shouldPlaySpin && !spinSource.isPlaying)
             {
                 spinSource.Play();
             }
-            // Stop spin sound when firing starts or barrel stops
+
             else if (!shouldPlaySpin && spinSource.isPlaying)
             {
                 spinSource.Stop();
             }
-            
-            // Only adjust pitch/volume when spin sound should be playing
+
             if (shouldPlaySpin)
             {
-                // Smoothly adjust pitch based on spin progress
                 float targetPitch = Mathf.Lerp(spinPitchMin, spinPitchMax, currentSpinProgress);
                 spinSource.pitch = Mathf.Lerp(spinSource.pitch, targetPitch, Time.deltaTime * 5f);
                 
-                // Smoothly adjust volume based on spin progress
                 float targetVolume = baseSpinVolume * Mathf.Clamp01(currentSpinProgress);
                 spinSource.volume = Mathf.Lerp(spinSource.volume, targetVolume, Time.deltaTime * 3f);
             }
         }
 
-        // Fire sound - plays only when actually firing (100% spin)
         if (fireSource != null && minigunFireLoopClip != null)
         {
             if (isFiring && !fireSource.isPlaying)
@@ -261,11 +245,9 @@ public class MinigunController : MonoBehaviour
 
             if (isFiring)
             {
-                // Varying pitch for realism
                 fireSource.pitch = Random.Range(firePitchMin, firePitchMax);
                 fireSource.volume = baseFireVolume + Random.Range(-0.05f, 0.05f);
                 
-                // Dynamic filter adjustment
                 if (fireLowPass != null)
                 {
                     fireLowPass.cutoffFrequency = Mathf.Lerp(
@@ -351,20 +333,17 @@ public class MinigunController : MonoBehaviour
 
     void Fire()
     {
-        // Raycast or projectile logic here
         PerformRaycast();
     }
     
     void SetupIgnoredTransforms()
     {
-        // Find root transform (highest parent)
         rootTransform = transform;
         while (rootTransform.parent != null)
         {
             rootTransform = rootTransform.parent;
         }
-        
-        // Add all children of root to ignored list
+
         AddAllChildren(rootTransform);
         
         Debug.Log($"Ignoring {ignoredTransforms.Count} transforms for raycast");
@@ -387,40 +366,32 @@ public class MinigunController : MonoBehaviour
             Debug.LogWarning("Impact Pool is not assigned!");
             return;
         }
-        
-        // Determine raycast origin and direction
+
         Vector3 origin;
         Vector3 direction;
-        
-        // Use camera center for accurate crosshair shooting
+
         if (targetCamera != null)
         {
-            // Raycast from center of screen (where crosshair is)
             Ray ray = targetCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
             origin = ray.origin;
             direction = ray.direction;
         }
         else if (raycastOrigin != null)
         {
-            // Fallback to raycast origin
             origin = raycastOrigin.position;
             direction = raycastOrigin.forward;
         }
         else
         {
-            // Last resort fallback
             origin = transform.position;
             direction = transform.forward;
         }
         
-        // Perform raycast
         RaycastHit hit;
         if (Physics.Raycast(origin, direction, out hit, raycastRange, hitLayers))
         {
-            // Check if hit object should be ignored
             if (ShouldIgnoreHit(hit.transform))
             {
-                // Hit own object, try raycast again from hit point
                 Vector3 newOrigin = hit.point + direction * 0.1f;
                 if (Physics.Raycast(newOrigin, direction, out hit, raycastRange, hitLayers))
                 {
@@ -439,7 +410,6 @@ public class MinigunController : MonoBehaviour
     
     bool ShouldIgnoreHit(Transform hitTransform)
     {
-        // Check if hit transform or any of its parents are in ignored list
         Transform current = hitTransform;
         while (current != null)
         {
@@ -454,7 +424,6 @@ public class MinigunController : MonoBehaviour
     
     void PlayImpactEffect(RaycastHit hit)
     {
-        // Play impact effect at hit point with surface normal
         impactPool.PlayImpactEffect(hit.point, hit.normal);
     }
 

@@ -2,11 +2,10 @@ using UnityEngine;
 
 public class HelicopterBlades : MonoBehaviour
 {
-    [SerializeField] private float rotationSpeed = 2000f; // Швидкість обертання в градусах за секунду
+    [SerializeField] private float rotationSpeed = 2000f;
 
     void Update()
     {
-        // Обертання навколо осі Z
         transform.Rotate(0f, rotationSpeed * Time.deltaTime, 0f);
     }
 }

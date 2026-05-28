@@ -15,7 +15,6 @@ public class CombatMusicManager : MonoBehaviour
     
     private AudioSource musicSource;
     
-    // Filters for music
     private AudioLowPassFilter musicLowPass;
     private AudioHighPassFilter musicHighPass;
     private AudioReverbFilter musicReverb;
@@ -35,7 +34,6 @@ public class CombatMusicManager : MonoBehaviour
 
     void SetupAudioSource()
     {
-        // Music source
         GameObject audioObj = new GameObject("Music_Track");
         audioObj.transform.SetParent(transform);
         audioObj.transform.localPosition = Vector3.zero;
@@ -43,7 +41,7 @@ public class CombatMusicManager : MonoBehaviour
         musicSource = audioObj.AddComponent<AudioSource>();
         musicSource.playOnAwake = false;
         musicSource.loop = true;
-        musicSource.spatialBlend = 0f; // 2D sound
+        musicSource.spatialBlend = 0f;
         musicSource.clip = musicTrack;
         musicSource.volume = musicVolume * masterVolume;
         musicSource.priority = 64;
@@ -55,17 +53,14 @@ public class CombatMusicManager : MonoBehaviour
     {
         if (musicSource == null) return;
         
-        // Low-pass filter - creates muffled "in-helicopter" feel
         musicLowPass = musicSource.gameObject.AddComponent<AudioLowPassFilter>();
         musicLowPass.cutoffFrequency = 5000f;
         musicLowPass.lowpassResonanceQ = 1.0f;
         
-        // High-pass filter - removes too much bass rumble
         musicHighPass = musicSource.gameObject.AddComponent<AudioHighPassFilter>();
         musicHighPass.cutoffFrequency = 200f;
         musicHighPass.highpassResonanceQ = 1.0f;
-        
-        // Reverb - adds space/interior acoustics (helicopter cabin feel)
+
         musicReverb = musicSource.gameObject.AddComponent<AudioReverbFilter>();
         musicReverb.reverbPreset = AudioReverbPreset.Room;
         musicReverb.dryLevel = -200f;
@@ -80,14 +75,12 @@ public class CombatMusicManager : MonoBehaviour
         musicReverb.diffusion = 70f;
         musicReverb.density = 60f;
         
-        // Echo - subtle mechanical echo from helicopter interior
         musicEcho = musicSource.gameObject.AddComponent<AudioEchoFilter>();
         musicEcho.delay = 50f;
         musicEcho.decayRatio = 0.3f;
         musicEcho.wetMix = 0.15f;
         musicEcho.dryMix = 0.85f;
         
-        // Chorus - adds richness and width to music
         musicChorus = musicSource.gameObject.AddComponent<AudioChorusFilter>();
         musicChorus.dryMix = 0.85f;
         musicChorus.wetMix1 = 0.35f;
@@ -111,11 +104,9 @@ public class CombatMusicManager : MonoBehaviour
         if (!enableInteriorEffect) return;
         
         float intensity = interiorEffectStrength;
-        
-        // Adjust filters dynamically based on interior effect strength
+
         if (musicLowPass != null)
         {
-            // Lower cutoff frequency = more muffled "interior" sound
             float targetFreq = Mathf.Lerp(10000f, 4000f, intensity);
             musicLowPass.cutoffFrequency = Mathf.Lerp(
                 musicLowPass.cutoffFrequency,
@@ -126,7 +117,6 @@ public class CombatMusicManager : MonoBehaviour
         
         if (musicReverb != null)
         {
-            // More reverb = stronger interior acoustic feel
             float targetRoom = Mathf.Lerp(-1000f, -600f, intensity);
             musicReverb.room = Mathf.Lerp(
                 musicReverb.room,
@@ -137,7 +127,6 @@ public class CombatMusicManager : MonoBehaviour
         
         if (musicEcho != null)
         {
-            // More echo = more mechanical interior reflections
             float targetWetMix = Mathf.Lerp(0.05f, 0.15f, intensity);
             musicEcho.wetMix = Mathf.Lerp(
                 musicEcho.wetMix,
@@ -147,7 +136,6 @@ public class CombatMusicManager : MonoBehaviour
         }
     }
 
-    // Public methods to control music
     public void SetMasterVolume(float volume)
     {
         masterVolume = Mathf.Clamp01(volume);
@@ -169,8 +157,7 @@ public class CombatMusicManager : MonoBehaviour
     public void SetInteriorEffect(bool enabled)
     {
         enableInteriorEffect = enabled;
-        
-        // If disabling, reset filters to neutral
+
         if (!enabled)
         {
             if (musicLowPass != null) musicLowPass.cutoffFrequency = 22000f;
@@ -213,8 +200,7 @@ public class CombatMusicManager : MonoBehaviour
         masterVolume = Mathf.Clamp01(masterVolume);
         musicVolume = Mathf.Clamp01(musicVolume);
         interiorEffectStrength = Mathf.Clamp01(interiorEffectStrength);
-        
-        // Update volume in real-time in editor
+
         if (Application.isPlaying && musicSource != null)
         {
             musicSource.volume = musicVolume * masterVolume;

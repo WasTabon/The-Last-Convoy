@@ -21,7 +21,6 @@ public class CrosshairUI : MonoBehaviour
     private Canvas canvas;
     private RectTransform canvasRect;
     
-    // Crosshair lines
     private Image topLine;
     private Image bottomLine;
     private Image leftLine;
@@ -44,7 +43,6 @@ public class CrosshairUI : MonoBehaviour
 
     void SetupCanvas()
     {
-        // Create canvas
         GameObject canvasObj = new GameObject("CrosshairCanvas");
         canvasObj.transform.SetParent(transform);
         
@@ -63,7 +61,6 @@ public class CrosshairUI : MonoBehaviour
 
     void CreateCrosshair()
     {
-        // Container for crosshair
         GameObject crosshairContainer = new GameObject("Crosshair");
         RectTransform containerRect = crosshairContainer.AddComponent<RectTransform>();
         containerRect.SetParent(canvasRect);
@@ -73,7 +70,6 @@ public class CrosshairUI : MonoBehaviour
         containerRect.anchoredPosition = Vector2.zero;
         containerRect.sizeDelta = new Vector2(100, 100);
         
-        // Create four lines
         topLine = CreateLine("TopLine", containerRect);
         bottomLine = CreateLine("BottomLine", containerRect);
         leftLine = CreateLine("LeftLine", containerRect);
@@ -99,23 +95,18 @@ public class CrosshairUI : MonoBehaviour
 
     void UpdateCrosshairAppearance()
     {
-        // Top line (vertical)
         topLine.rectTransform.sizeDelta = new Vector2(lineThickness, lineLength);
         topLine.rectTransform.anchoredPosition = new Vector2(0, centerGap + lineLength / 2f + currentSpread);
         
-        // Bottom line (vertical)
         bottomLine.rectTransform.sizeDelta = new Vector2(lineThickness, lineLength);
         bottomLine.rectTransform.anchoredPosition = new Vector2(0, -(centerGap + lineLength / 2f + currentSpread));
         
-        // Left line (horizontal)
         leftLine.rectTransform.sizeDelta = new Vector2(lineLength, lineThickness);
         leftLine.rectTransform.anchoredPosition = new Vector2(-(centerGap + lineLength / 2f + currentSpread), 0);
         
-        // Right line (horizontal)
         rightLine.rectTransform.sizeDelta = new Vector2(lineLength, lineThickness);
         rightLine.rectTransform.anchoredPosition = new Vector2(centerGap + lineLength / 2f + currentSpread, 0);
         
-        // Update colors
         topLine.color = crosshairColor;
         bottomLine.color = crosshairColor;
         leftLine.color = crosshairColor;
@@ -126,17 +117,14 @@ public class CrosshairUI : MonoBehaviour
     {
         if (!enableDynamicSpread) return;
         
-        // Check if minigun is actually firing (not just spinning up)
         bool isFiring = false;
         if (minigunController != null)
         {
             isFiring = minigunController.IsFiring();
         }
         
-        // Set target spread based on firing state
         targetSpread = isFiring ? maxSpread : 0f;
         
-        // Smoothly lerp current spread to target
         currentSpread = Mathf.Lerp(currentSpread, targetSpread, Time.deltaTime * spreadSpeed);
         
         UpdateCrosshairAppearance();
@@ -144,8 +132,6 @@ public class CrosshairUI : MonoBehaviour
 
     void UpdateCrosshairPosition()
     {
-        // Crosshair is always centered, no need to update position
-        // But we update appearance in case settings changed
         if (!enableDynamicSpread)
         {
             currentSpread = spreadAmount;
@@ -153,7 +139,6 @@ public class CrosshairUI : MonoBehaviour
         }
     }
 
-    // Public methods to control crosshair
     public void SetColor(Color color)
     {
         crosshairColor = color;

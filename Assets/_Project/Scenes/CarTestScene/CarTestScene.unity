@@ -96,7 +96,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 2e2cd79246a2a8f40b77d9b8f75a3e4e,
+    type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: 73aa6310776961044b4c4b003cf62df8,
     type: 2}
 --- !u!196 &4
@@ -7309,11 +7310,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _engineIdleLoop: {fileID: 8300000, guid: bcea792c05efec34b90a1ff48fffea78, type: 3}
-  _baseVolume: 0.5
+  _baseVolume: 1
   _pitchMin: 0.8
   _pitchMax: 1.5
   _volumeMin: 0.4
-  _volumeMax: 0.7
+  _volumeMax: 1
   _maxSpeed: 25
 --- !u!95 &683370426192529118
 Animator:
